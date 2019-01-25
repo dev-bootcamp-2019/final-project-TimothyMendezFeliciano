@@ -15137,12 +15137,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x431F09dF9499969a0fA46A0bdeF84FBA32372555",
-      "transactionHash": "0x4c0212d89437befdfd74c28ab4197016e20d0a0bc5dbbb5b3167b535913d975f"
+      "address": "0x88d79B5E88F89dC3dE819BcaAdA1A12b3219dc4A",
+      "transactionHash": "0xa1b75ec6924240acc0c09548969602ba4789efa234ef401e145a30828a55de3e"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-25T05:10:36.828Z",
+  "updatedAt": "2019-01-25T20:05:15.962Z",
   "devdoc": {
     "methods": {
       "addAdmin(address)": {
