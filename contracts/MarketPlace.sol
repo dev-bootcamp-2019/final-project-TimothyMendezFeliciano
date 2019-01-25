@@ -105,10 +105,20 @@ contract MarketPlace {
    */
   function identifyUser(address _address) public returns (uint) {
     if(isAdmin(_address)) userType[_address] = 1;
-      else if(isStoreOwner(_address)) userType[_address] = 2;
+      else if(isStoreOwner(_address) || isAdmin(_address)) userType[_address] = 2;
     else userType[_address] = 3;
     return userType[_address];
+  }
 
+  /**
+  @dev To verify the type of user
+  @return number corresponding to the userType
+   */
+  function identifyUser() public returns (uint) {
+    if(isAdmin(msg.sender)) userType[msg.sender] = 1;
+      else if(isStoreOwner(msg.sender)) userType[msg.sender] = 2;
+    else userType[msg.sender] = 3;
+    return userType[msg.sender];
   }
 
   function getStopped() public view returns(bool result) {
@@ -139,9 +149,11 @@ contract MarketPlace {
   	return storeOwners[_address];
   }
 
-  // @dev Utilized to  
-  function toggleContractActive() onlyAdmin public {
+  // @dev Utilized to toggle whether contract should be stopped
+  // @return result tru or false depending on wheter the contract is active or not
+  function toggleContractActive() onlyAdmin public returns (bool result) {
     stopped = !stopped;
+    return stopped;
   }
 
   /////////////// ONLY STORE OWNER FUNCTIONS /////////////

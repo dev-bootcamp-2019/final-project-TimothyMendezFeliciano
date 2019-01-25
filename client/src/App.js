@@ -11,7 +11,8 @@ class App extends Component {
     Emergency: null, 
     web3: null, 
     accounts: null, 
-    contract: null
+    contract: null,
+    address: ' '
   };
 
   componentDidMount = async () => {
@@ -22,7 +23,7 @@ class App extends Component {
 
       // Use web3 to get the user's accounts and balance
       const accounts = await web3.eth.getAccounts();
-
+      console.log(accounts);
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = MarketPlaceContract.networks[networkId];
@@ -44,34 +45,68 @@ class App extends Component {
 
   runExample = async () => {
     const contract = this.state.contract;
-    const accounts = this.state.accounts;
 
     // Used to identify the type of user
-    const user = await contract.methods.identifyUser(accounts[0]).call({from: accounts[0]});
+    const user = await contract.methods.identifyUser().call();
 
     // Get the value from the contract to prove it worked.
     const emergency = await contract.methods.getStopped().call();
-
-     //console.log(contract);
-    // console.log(accounts[0]);
-
-    // console.log(user);
-    // console.log(emergency);
 
     // Update state with the result.
     this.setState({UserType: user, Emergency: emergency });
   };
 
+  handleAddress(event) {
+    this.setState({
+      address:event.target.value
+    })
+  }
+
+  handleAddAdmin = async (event) => {
+    const contract = this.state.contract;
+    const address = this.state.address;
+
+    const Tx = await contract.methods.addAdmin(address).call();
+    
+  };
+
+  handleAddOwner = async (event) => {
+    const contract = this.state.contract;
+    const address = this.state.address;
+
+    const Tx = await contract.methods.addStoreOwner(address).call();
+
+  };
+
+  handleActive = async (event) => {
+    const contract = this.state.contract;
+    var result = await contract.methods.toggleContractActive().call();
+    this.setState({Emergency: result});
+  };
+
   render()
   {
-
-    if (!this.state.web3) 
+    if (!this.state.web3 && !this.state.Emergency) 
     {
       return <div>Loading Web3, accounts, and contract...</div>;
-    } 
+    }
+    
     return (
     <div className="App">
-    <h1> Welcome to the Online Market Place dApp! </h1>
+    <h1> Welcome to the Online Market Place dApp!</h1>
+    <p>
+    As you are an admin, you have the privilege to these functions.
+    </p>
+    <h2> Add another admin.</h2>
+    <input type="text" data={this.state.address} onChange={this.handleAddress.bind(this)} />
+    <button onClick={this.handleAddAdmin.bind(this)}>Add Admin </button>
+
+    <h2> Add store owner.</h2>
+    <input type="text" data={this.state.address} onChange={this.handleAddress.bind(this)} />
+    <button onClick={this.handleAddOwner.bind(this)}>Add Owner </button>
+
+    <h2> Toggle Contract Active.</h2>
+    <button onClick={this.handleActive.bind(this)}>Activate/Deactivate </button>
     </div>
     );
   }
