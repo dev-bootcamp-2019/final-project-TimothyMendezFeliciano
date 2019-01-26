@@ -242,7 +242,10 @@ contract MarketPlace {
   msg.sender is debited ether using the transfer() function.
   product availability is reduced by the amount of items purchased
   */
-  function purchaseProduct(address _ownerAddress, uint _amount) public payable returns (address caller, string memory name, uint amount) {
+  function purchaseProduct(address _ownerAddress, uint _amount)
+    public
+    payable
+    returns (address caller, string memory name, uint amount) {
 
   	store[_ownerAddress].funds += product[_ownerAddress].price * _amount;
   	msg.sender.transfer(product[_ownerAddress].price * _amount);
